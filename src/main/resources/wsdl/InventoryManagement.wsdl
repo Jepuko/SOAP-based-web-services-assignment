@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<wsdl:definitions  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://supply.com/InventoryManagementService" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="InventoryManagementService" targetNamespace="http://supply.com/InventoryManagementService">
+
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://supply.com/InventoryManagementService">
+
+            <!-- Sell Request Object -->
+            <xsd:element name="sellObject">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="sellCommand" type="xsd:string" />
+                        <xsd:element name="userId" type="xsd:integer" />
+                        <xsd:element name="inventoryId" type="xsd:integer" />
+                        <xsd:element name="numberOfProducts" type="xsd:integer" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- Sell Response Object -->
+            <xsd:element name="sellResponseObject">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="sellResponse" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- Purchase Request Object -->
+            <xsd:element name="purchaseObject">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="purchaseCommand" type="xsd:string" />
+                        <xsd:element name="userId" type="xsd:integer" />
+                        <xsd:element name="inventoryId" type="xsd:integer" />
+                        <xsd:element name="numberOfProducts" type="xsd:integer" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- Purchase Response Object -->
+            <xsd:element name="purchaseResponseObject">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="purchaseResponse" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- Current Inventory Request Object -->
+            <xsd:element name="inventoryRequestObject">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="currentCommand" type="xsd:string" />
+                        <xsd:element name="inventoryId" type="xsd:integer" />
+                        <xsd:element name="userId" type="xsd:integer" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- Current Inventory Response Object -->
+            <xsd:element name="inventoryResponseObject">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="userName" type="xsd:string" />
+                        <xsd:element name="numberOfProducts" type="xsd:integer" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+        </xsd:schema>
+    </wsdl:types>
+
+    <!-- Operation Sell - from Inventory -->
+    <wsdl:message name="SellProductInput">
+        <wsdl:part name="sellingInput" element="tns:sellObject" />
+    </wsdl:message>
+
+    <wsdl:message name="SellProductOutput">
+        <wsdl:part name="sellResponse" element="tns:sellResponseObject" />
+    </wsdl:message>
+
+    <wsdl:portType name="SellProductPortType">
+        <wsdl:operation name="SellProduct">
+            <wsdl:input message="tns:SellProductInput" />
+            <wsdl:output message="tns:SellProductOutput" />
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <!-- Operation Check Current Inventory -->
+    <wsdl:message name="CheckInventoryInput">
+        <wsdl:part name="inventoryInput" element="tns:inventoryRequestObject" />
+    </wsdl:message>
+
+    <wsdl:message name="CheckInventoryOutput">
+        <wsdl:part name="inventoryOutput" element="tns:inventoryResponseObject" />
+    </wsdl:message>
+
+    <wsdl:portType name="CheckInventoryPortType">
+        <wsdl:operation name="CheckInventory">
+            <wsdl:input message="tns:CheckInventoryInput" />
+            <wsdl:output message="tns:CheckInventoryOutput" />
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <!-- Operation Purchase more Inventory -->
+    <wsdl:message name="PurchaseProductInput">
+        <wsdl:part name="purchaseInput" element="tns:purchaseObject" />
+    </wsdl:message>
+
+    <wsdl:message name="PurchaseProductOutput">
+        <wsdl:part name="purchaseResponse" element="tns:purchaseResponseObject" />
+    </wsdl:message>
+
+    <wsdl:portType name="PurchaseProductPortType">
+        <wsdl:operation name="PurchaseProduct">
+            <wsdl:input message="tns:PurchaseProductInput" />
+            <wsdl:output message="tns:PurchaseProductOutput" />
+        </wsdl:operation>
+    </wsdl:portType>
+
+
+    <!-- Binding for Operation Selling Products -->
+    <wsdl:binding name="SellProductsSOAPBinding" type="tns:SellProductPortType">
+        <!-- leverage off soapbind:binding synchronous style -->
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="SellProduct">
+            <!-- again bind to SOAP -->
+            <soap:operation soapAction="http://supply.com/InventoryManagementService/wsdl/SellProduct" style="document"/>
+            <!-- further specify that the messages in the wsdl:operation use SOAP -->
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <!-- Binding for Purchasing Products -->
+    <wsdl:binding name="PurchaseProductsSOAPBinding" type="tns:PurchaseProductPortType">
+        <!-- leverage off soapbind:binding synchronous style -->
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="PurchaseProduct">
+            <!-- again bind to SOAP -->
+            <soap:operation soapAction="http://supply.com/InventoryManagementService/wsdl/PurchaseProduct" style="document"/>
+            <!-- further specify that the messages in the wsdl:operation use SOAP -->
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <!-- Binding for Checking Inventory -->
+    <wsdl:binding name="CheckInventorySOAPBinding" type="tns:CheckInventoryPortType">
+        <!-- leverage off soapbind:binding synchronous style -->
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="CheckInventory">
+            <!-- again bind to SOAP -->
+            <soap:operation soapAction="http://supply.com/InventoryManagementService/wsdl/CheckInventory" style="document"/>
+            <!-- further specify that the messages in the wsdl:operation use SOAP -->
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="InventoryManagementService">
+        <wsdl:port name="SellProductPort" binding="tns:SellProductsSOAPBinding">
+            <!-- give the binding a network endpoint address or URI of service  -->
+            <soap:address location="http://localhost:8080/ws.InventoryManagement/services/SellProductService"/>
+        </wsdl:port>
+
+        <wsdl:port name="CheckInventoryPort" binding="tns:CheckInventorySOAPBinding">
+            <!-- give the binding a network endpoint address or URI of service  -->
+            <soap:address location="http://localhost:8080/ws.InventoryManagement/services/CheckInventoryService"/>
+        </wsdl:port>
+
+        <wsdl:port name="PurchaseProductPort" binding="tns:PurchaseProductsSOAPBinding">
+            <!-- give the binding a network endpoint address or URI of service  -->
+            <soap:address location="http://localhost:8080/ws.InventoryManagement/services/PurchaseProductService"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>
